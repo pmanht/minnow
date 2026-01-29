@@ -12,7 +12,18 @@ namespace {
 void get_URL( const string& host, const string& path )
 {
   debug( "Function called: get_URL( \"{}\", \"{}\" )", host, path );
-  debug( "get_URL() function not yet implemented" );
+
+  string response;
+  TCPSocket tcp_socket;
+
+  tcp_socket.connect( Address { host, "http" } );
+  tcp_socket.write( "GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n" );
+
+  while (!tcp_socket.eof()) {
+    tcp_socket.read(response);
+    cout << response;
+  }
+  tcp_socket.close();
 }
 } // namespace
 
